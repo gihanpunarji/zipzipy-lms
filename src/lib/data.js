@@ -142,6 +142,57 @@ export const continueLearning = [
 ];
 
 
+export const courses = [
+    {
+        id: "1",
+        title: "Web Development Bootcamp",
+        instructor: "Jane Doe",
+        thumbnail: "/images/course-thumbnails/web-dev.svg",
+        status: "In Progress",
+        progress: 60,
+    },
+    {
+        id: "2",
+        title: "Data Science with Python",
+        instructor: "John Smith",
+        thumbnail: "/images/course-thumbnails/data-science.svg",
+        status: "In Progress",
+        progress: 40,
+    },
+    {
+        id: "3",
+        title: "Digital Marketing Fundamentals",
+        instructor: "Emily White",
+        thumbnail: "/images/course-thumbnails/marketing.svg",
+        status: "Completed",
+        progress: 100,
+    },
+    {
+        id: "4",
+        title: "Advanced React",
+        instructor: "Michael Johnson",
+        thumbnail: "/images/course-thumbnails/react.svg",
+        status: "In Progress",
+        progress: 25,
+    },
+    {
+        id: "5",
+        title: "UI/UX Design Principles",
+        instructor: "Sarah Williams",
+        thumbnail: "/images/course-thumbnails/uiux.svg",
+        status: "Not Started",
+        progress: 0,
+    },
+    {
+        id: "6",
+        title: "Node.js Backend Development",
+        instructor: "David Brown",
+        thumbnail: "/images/course-thumbnails/nodejs.svg",
+        status: "Completed",
+        progress: 100,
+    },
+];
+
 export const detailedCourses = [
     {
         id: "1",

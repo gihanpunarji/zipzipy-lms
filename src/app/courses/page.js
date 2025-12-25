@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { Navbar } from "../components/landing/navbar";
-import { Button } from "../components/ui/button";
-import { Card } from "../components/ui/card";
+import { Button } from "@/app/components/ui/button";
+import { Card } from "@/app/components/ui/card";
 import { Play, Clock, Users, Star, BookOpen, Award, Zap, Code, Database, Brain, Trophy } from "lucide-react";
 
 export default function CoursesPage() {
@@ -179,7 +179,7 @@ export default function CoursesPage() {
                       </div>
                       <div className="space-y-2">
                         <h3 className="text-lg md:text-xl font-bold text-white">Watch Course Intro</h3>
-                        <p className="text-sm text-white/80">See what you'll build</p>
+                        <p className="text-sm text-white/80">See what you&apos;ll build</p>
                       </div>
                     </div>
                   </div>
@@ -216,7 +216,7 @@ export default function CoursesPage() {
               What Makes This Course <span className="text-gradient-primary">Special</span>
             </h2>
             <p className="text-lg text-muted-foreground">
-              This is not just a typical course. It's a full mentoring experience designed around real software engineering practices.
+              This is not just a typical course. It&apos;s a full mentoring experience designed around real software engineering practices.
             </p>
           </div>
 
@@ -386,7 +386,7 @@ export default function CoursesPage() {
                 style={{ boxShadow: '0 4px 14px 0 rgba(139, 92, 246, 0.4)' }}
               >
                 <Play className="mr-2 w-6 h-6" />
-                Enroll Now - It's Free!
+                Enroll Now - It&apos;s Free!
               </Button>
             </Link>
           </div>

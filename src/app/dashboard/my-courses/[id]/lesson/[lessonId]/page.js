@@ -12,7 +12,7 @@ import {
 } from "@/app/components/ui/collapsible";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
 import { detailedCourses } from "@/lib/data";
-import { ChevronLeft, ChevronRight, CheckCircle, Circle } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle, Circle, ChevronDown } from "lucide-react";
 
 export default function LessonVideoPlayerPage() {
   const router = useRouter();
@@ -21,23 +21,22 @@ export default function LessonVideoPlayerPage() {
 
   const course = detailedCourses.find((c) => c.id === courseId);
 
-  if (!course) {
-    return <div>Course not found</div>;
-  }
-
   // Find the current lesson and its module
   const { currentModule, currentLesson, currentLessonIndex, currentModuleIndex } = useMemo(() => {
+    if (!course) {
+      return { currentModule: null, currentLesson: null, currentLessonIndex: -1, currentModuleIndex: -1 };
+    }
     let currentModule = null;
     let currentLesson = null;
     let currentLessonIndex = -1;
     let currentModuleIndex = -1;
 
     for (let i = 0; i < course.modules.length; i++) {
-      const module = course.modules[i];
-      for (let j = 0; j < module.lessons.length; j++) {
-        const lesson = module.lessons[j];
+      const courseModule = course.modules[i];
+      for (let j = 0; j < courseModule.lessons.length; j++) {
+        const lesson = courseModule.lessons[j];
         if (lesson.id === lessonId) {
-          currentModule = module;
+          currentModule = courseModule;
           currentLesson = lesson;
           currentModuleIndex = i;
           currentLessonIndex = j;
@@ -48,6 +47,10 @@ export default function LessonVideoPlayerPage() {
     }
     return { currentModule, currentLesson, currentLessonIndex, currentModuleIndex };
   }, [course, lessonId]);
+
+  if (!course) {
+    return <div>Course not found</div>;
+  }
 
   if (!currentLesson) {
     return <div>Lesson not found</div>;
@@ -186,7 +189,7 @@ export default function LessonVideoPlayerPage() {
                 </CardHeader>
                 <CardContent>
                   <p>
-                    These are the notes for the lesson "{currentLesson.title}".
+                    These are the notes for the lesson &quot;{currentLesson.title}&quot;.
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                     eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   </p>
@@ -220,7 +223,7 @@ export default function LessonVideoPlayerPage() {
                   <CardTitle>Discussion & Comments</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>Discussion forum for "{currentLesson.title}".</p>
+                  <p>Discussion forum for &quot;{currentLesson.title}&quot;.</p>
                   {/* Placeholder for comments */}
                   <div className="mt-4 border-t pt-4">
                     <p className="text-muted-foreground">No comments yet. Be the first to comment!</p>

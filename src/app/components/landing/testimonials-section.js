@@ -75,7 +75,7 @@ export function TestimonialsSection() {
 
                 {/* Testimonial text */}
                 <p className="mb-6 text-muted-foreground leading-relaxed italic">
-                  "{testimonial.testimonial}"
+                  &quot;{testimonial.testimonial}&quot;
                 </p>
 
                 {/* Name and role */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { Navbar } from "../components/landing/navbar";
-import { Card } from "../components/ui/card";
+import { Card } from "@/app/components/ui/card";
 import {
   Target,
   Eye,
@@ -103,7 +103,7 @@ export default function AboutPage() {
                   From planning to deployment, our focus is always on delivering clean, scalable, and future-ready software that helps our clients grow.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  We believe in simple processes, transparent communication, and engineering excellence. Whether it's a startup idea or a full enterprise solution, we treat every project with the same level of care and attention.
+                  We believe in simple processes, transparent communication, and engineering excellence. Whether it&apos;s a startup idea or a full enterprise solution, we treat every project with the same level of care and attention.
                 </p>
               </div>
             </Card>
@@ -144,7 +144,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Our mission is to push the boundaries of technology, leveraging the latest advancements to create products that not only meet but exceed our clients' expectations.
+                Our mission is to push the boundaries of technology, leveraging the latest advancements to create products that not only meet but exceed our clients&apos; expectations.
               </p>
             </Card>
 
@@ -158,7 +158,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                To become one of Sri Lanka's most trusted and innovative software companies—known for high-quality work, on-time delivery, and long-term partnerships.
+                To become one of Sri Lanka&apos;s most trusted and innovative software companies—known for high-quality work, on-time delivery, and long-term partnerships.
               </p>
             </Card>
           </div>

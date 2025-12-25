@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { Navbar } from "../components/landing/navbar";
-import { Card } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Textarea } from "../components/ui/textarea";
+import { Card } from "@/app/components/ui/card";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Textarea } from "@/app/components/ui/textarea";
 import {
   Mail,
   Phone,
@@ -81,7 +81,7 @@ export default function ContactPage() {
               Get in <span className="text-gradient-primary">Touch</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              Have a project in mind or want to learn more about our services? We'd love to hear from you.
+              Have a project in mind or want to learn more about our services? We&apos;d love to hear from you.
             </p>
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold mb-2">Send Us a Message</h2>
-                  <p className="text-muted-foreground">Fill out the form below and we'll get back to you within 24 hours.</p>
+                  <p className="text-muted-foreground">Fill out the form below and we&apos;ll get back to you within 24 hours.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">

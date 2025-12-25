@@ -112,7 +112,7 @@ export function HeroSection() {
                       </div>
                       <div className="space-y-1 md:space-y-2">
                         <h3 className="text-base md:text-lg lg:text-xl font-bold text-white">Watch Course Intro</h3>
-                        <p className="text-xs md:text-sm text-gray-400">See what you'll learn</p>
+                        <p className="text-xs md:text-sm text-gray-400">See what you&apos;ll learn</p>
                       </div>
                     </div>
                   </div>

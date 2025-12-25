@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/app/components/ui/dialog";
 import { Textarea } from "@/app/components/ui/textarea";
+import { Input } from "@/app/components/ui/input";
 import { detailedAssignments } from "@/lib/data";
 import { CheckCircle, Upload, FileText } from "lucide-react";
 import { Badge } from "@/app/components/ui/badge";
@@ -35,14 +36,14 @@ import {
 
 export default function AssignmentDetailsPage() {
   const { id } = useParams();
+  const [submissionFile, setSubmissionFile] = useState(null);
+  const [submissionText, setSubmissionText] = useState("");
+
   const assignment = detailedAssignments.find((a) => a.id === id);
 
   if (!assignment) {
     return <div>Assignment not found</div>;
   }
-
-  const [submissionFile, setSubmissionFile] = useState(null);
-  const [submissionText, setSubmissionText] = useState("");
 
   const handleFileChange = (e) => {
     setSubmissionFile(e.target.files[0]);
@@ -61,26 +62,16 @@ export default function AssignmentDetailsPage() {
 
   const handleSubmit = () => {
     // In a real application, you would send submissionFile or submissionText to a backend.
-    alert(
-      `Submitting assignment: ${
-        submissionFile ? submissionFile.name : "Text submission"
-      }`
-    );
-    // Simulate submission update
-    // This is a client-side mock, actual state management would be more complex
-    assignment.submissionHistory.push({
-      timestamp: new Date().toISOString(),
+    const submissionData = {
       fileName: submissionFile ? submissionFile.name : "Text submission",
-      status: "Submitted",
-      score: null,
-      feedback: null,
-    });
-    assignment.currentSubmission = {
-      fileName: submissionFile ? submissionFile.name : "Text submission",
+      text: submissionText,
       timestamp: new Date().toISOString(),
-      status: "Submitted",
     };
-    assignment.status = "Submitted";
+
+    alert(`Submitting assignment: ${submissionData.fileName}`);
+
+    // In a real app, this would be an API call to save the submission
+    // For now, we just reset the form
     setSubmissionFile(null);
     setSubmissionText("");
     alert("Assignment submitted successfully!");

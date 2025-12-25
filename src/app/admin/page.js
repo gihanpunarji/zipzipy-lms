@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "../components/ui/card";
+import { Card } from "@/app/components/ui/card";
 import { DollarSign, TrendingUp, Users, BookOpen } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -42,7 +42,7 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's your overview.</p>
+        <p className="text-muted-foreground">Welcome back! Here&apos;s your overview.</p>
       </div>
 
       {/* Stats Grid */}

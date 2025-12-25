@@ -12,18 +12,18 @@ import {
   CollapsibleTrigger,
 } from "@/app/components/ui/collapsible";
 import { detailedCourses } from "@/lib/data";
-import { Clock, Star, Users, ChevronDown, CheckCircle } from "lucide-react";
+import { Clock, Star, Users, ChevronDown, CheckCircle, Circle } from "lucide-react";
 import { Progress } from "@/app/components/ui/progress";
 
 export default function CourseDetailsPage({ params }) {
   const { id } = params;
+  const [activeLesson, setActiveLesson] = useState(null);
+
   const course = detailedCourses.find((c) => c.id === id);
 
   if (!course) {
     return <div>Course not found</div>;
   }
-
-  const [activeLesson, setActiveLesson] = useState(null);
 
   const handleLessonClick = (lessonId) => {
     setActiveLesson(lessonId);
@@ -110,7 +110,7 @@ export default function CourseDetailsPage({ params }) {
 
           <Card>
             <CardHeader>
-              <CardTitle>What You'll Learn</CardTitle>
+              <CardTitle>What You&apos;ll Learn</CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="grid gap-2">
