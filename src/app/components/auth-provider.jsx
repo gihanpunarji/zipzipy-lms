@@ -33,8 +33,7 @@ export default function AuthProvider({ children }) {
       email,
       password,
     });
-    if (error) throw error;
-    return data;
+    return { data, error };
   };
 
   const signUp = async (email, password, metadata = {}) => {

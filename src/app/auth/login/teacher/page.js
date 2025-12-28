@@ -28,10 +28,12 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      await signIn(email, password);
+      const { error } = await signIn(email, password);
+      if (error) throw error;
+
       // Redirect to teacher dashboard or main dashboard
       // Assuming same dashboard for now, or check role
-      router.push("/dashboard"); 
+      router.push("/dashboard/teacher");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -62,11 +64,11 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                placeholder="m@example.com" 
-                required 
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -81,10 +83,10 @@ export default function LoginPage() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input 
-                id="password" 
-                type="password" 
-                required 
+              <Input
+                id="password"
+                type="password"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

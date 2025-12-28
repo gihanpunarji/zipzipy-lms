@@ -10,6 +10,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: "/courses", label: "Courses" },
+    { href: "/pricing", label: "Pricing" },
     { href: "/about", label: "About Us" },
     { href: "/contact", label: "Contact" },
   ];
