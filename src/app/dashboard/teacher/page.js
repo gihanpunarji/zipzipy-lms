@@ -1,8 +1,7 @@
 "use client";
 
 import { useAuth } from "@/app/components/auth-provider";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { usePlanLimits } from "@/hooks/usePlanLimits";
 import {
     Card,
     CardContent,
@@ -10,67 +9,29 @@ import {
     CardTitle,
 } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
-import { Clock, CreditCard } from "lucide-react";
+import { Progress } from "@/app/components/ui/progress";
+import { Clock, CreditCard, Video, MessageSquare, AlertTriangle } from "lucide-react";
 
 export default function TeacherDashboardPage() {
     const { user } = useAuth();
-    const [planInfo, setPlanInfo] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [daysRemaining, setDaysRemaining] = useState(0);
+    const {
+        loading,
+        planInfo,
+        planConfig,
+        usage,
+        canUploadVideo,
+        canSendSMS,
+        remainingVideos,
+        remainingSMS,
+        videoUsagePercentage,
+        smsUsagePercentage,
+        isTrialActive,
+        trialDaysRemaining,
+    } = usePlanLimits();
 
     // Using optional chaining and defaults just in case
     const firstName = user?.user_metadata?.firstName || user?.user_metadata?.first_name || "Teacher";
     const lastName = user?.user_metadata?.lastName || user?.user_metadata?.last_name || "";
-
-    useEffect(() => {
-        async function fetchPlanInfo() {
-            if (!user?.id) return;
-
-            try {
-                // Fetch user id from users table
-                const { data: userData, error: userError } = await supabase
-                    .from('users')
-                    .select('id')
-                    .eq('uid', user.id)
-                    .single();
-
-                if (userError) {
-                    console.error("Error fetching user:", userError);
-                    setLoading(false);
-                    return;
-                }
-
-                // Fetch plan info using the user's id
-                const { data: planData, error: planError } = await supabase
-                    .from('teacher_plan')
-                    .select('*')
-                    .eq('id', userData.id)
-                    .single();
-
-                if (planError) {
-                    console.error("Error fetching plan:", planError);
-                } else {
-                    setPlanInfo(planData);
-
-                    // Calculate days remaining in trial (7 days from created_at)
-                    const createdDate = new Date(planData.created_at);
-                    const currentDate = new Date();
-                    const trialEndDate = new Date(createdDate);
-                    trialEndDate.setDate(trialEndDate.getDate() + 7);
-
-                    const timeDiff = trialEndDate - currentDate;
-                    const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-                    setDaysRemaining(daysLeft > 0 ? daysLeft : 0);
-                }
-            } catch (err) {
-                console.error("Unexpected error:", err);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchPlanInfo();
-    }, [user]);
 
     return (
         <div className="flex flex-col gap-6">
@@ -83,9 +44,22 @@ export default function TeacherDashboardPage() {
                 </p>
             </div>
 
+            {/* Trial Warning Banner */}
+            {!loading && isTrialActive && trialDaysRemaining <= 3 && (
+                <Card className="border-orange-500 bg-orange-50 dark:bg-orange-950">
+                    <CardContent className="flex items-center gap-3 pt-6">
+                        <AlertTriangle className="h-5 w-5 text-orange-500" />
+                        <div>
+                            <p className="font-semibold">Your free trial ends in {trialDaysRemaining} {trialDaysRemaining === 1 ? 'day' : 'days'}</p>
+                            <p className="text-sm text-muted-foreground">Subscribe now to continue using all features without interruption.</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
+
             {/* Trial & Plan Info */}
             {!loading && planInfo && (
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card className="border-primary/50 bg-gradient-to-br from-primary/5 to-accent/5">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
@@ -95,12 +69,12 @@ export default function TeacherDashboardPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-primary">
-                                {daysRemaining} {daysRemaining === 1 ? 'Day' : 'Days'} Remaining
+                                {trialDaysRemaining} {trialDaysRemaining === 1 ? 'Day' : 'Days'}
                             </div>
                             <p className="text-xs text-muted-foreground mt-1">
-                                {daysRemaining > 0
-                                    ? `Your free trial ends in ${daysRemaining} ${daysRemaining === 1 ? 'day' : 'days'}`
-                                    : 'Your free trial has ended'}
+                                {trialDaysRemaining > 0
+                                    ? 'Trial days remaining'
+                                    : 'Trial has ended'}
                             </p>
                         </CardContent>
                     </Card>
@@ -120,10 +94,65 @@ export default function TeacherDashboardPage() {
                                 )}
                             </div>
                             <p className="text-xs text-muted-foreground mt-1">
-                                {planInfo.selected_plan === 'Basic' && 'Up to 3 videos/month'}
-                                {planInfo.selected_plan === 'Pro' && 'Up to 5 videos/month'}
-                                {planInfo.selected_plan === 'Max' && 'Up to 10 videos/month'}
+                                {planConfig?.price}
                             </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card className={!canUploadVideo ? 'border-red-500' : ''}>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                Videos This Month
+                            </CardTitle>
+                            <Video className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">
+                                {usage.videosUploaded}/{planConfig?.videosPerMonth}
+                            </div>
+                            <Progress value={videoUsagePercentage} className="mt-2 h-2" />
+                            <p className="text-xs text-muted-foreground mt-2">
+                                {remainingVideos === -1
+                                    ? 'Unlimited videos'
+                                    : remainingVideos > 0
+                                        ? `${remainingVideos} remaining`
+                                        : 'Limit reached'}
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card className={!canSendSMS && planConfig?.smsAlertsPerMonth > 0 ? 'border-red-500' : ''}>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                SMS Alerts
+                            </CardTitle>
+                            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">
+                                {planConfig?.smsAlertsPerMonth === -1
+                                    ? usage.smsSent
+                                    : planConfig?.smsAlertsPerMonth === 0
+                                        ? 'N/A'
+                                        : `${usage.smsSent}/${planConfig?.smsAlertsPerMonth}`}
+                            </div>
+                            {planConfig?.smsAlertsPerMonth > 0 && (
+                                <>
+                                    <Progress value={smsUsagePercentage} className="mt-2 h-2" />
+                                    <p className="text-xs text-muted-foreground mt-2">
+                                        {remainingSMS === -1
+                                            ? 'Unlimited SMS'
+                                            : remainingSMS > 0
+                                                ? `${remainingSMS} remaining`
+                                                : 'Limit reached'}
+                                    </p>
+                                </>
+                            )}
+                            {planConfig?.smsAlertsPerMonth === 0 && (
+                                <p className="text-xs text-muted-foreground mt-2">
+                                    Upgrade to Pro or Max
+                                </p>
+                            )}
                         </CardContent>
                     </Card>
                 </div>

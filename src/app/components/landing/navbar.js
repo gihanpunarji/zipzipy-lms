@@ -9,7 +9,7 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "/courses", label: "Courses" },
+    { href: "/home", label: "Home" },
     { href: "/pricing", label: "Pricing" },
     { href: "/about", label: "About Us" },
     { href: "/contact", label: "Contact" },
@@ -36,7 +36,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium"
-                style={{ color: link.href === '/courses' ? '#8b5cf6' : undefined }}
+                style={{ color: link.href === '/home' ? '#8b5cf6' : undefined }}
               >
                 {link.label}
               </Link>

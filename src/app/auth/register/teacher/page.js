@@ -79,10 +79,13 @@ export default function RegisterPage() {
       if (data?.user) {
         if (data.user.identities && data.user.identities.length === 0) {
           setError("This email is already registered. Please login instead.");
-        } else {
-          alert("Registration successful!");
-          console.log("Registration successful!");
+          setLoading(false);
+          return;
+        }
 
+        console.log("Registration successful! Setting up account...");
+
+        try {
           // Insert user into users table
           const { data: userData, error: userError } = await supabase.from('users').insert({
             uid: data.user.id,
@@ -97,15 +100,16 @@ export default function RegisterPage() {
 
           if (userError) {
             console.error("Database insertion error:", userError);
-            setError("An unexpected error occurred. Please try again.");
+            setError("Failed to create user profile. Please contact support.");
+            setLoading(false);
             return;
           }
 
           if (userData && userData.length > 0) {
-            console.log("Database insertion successful!", userData);
+            console.log("User profile created successfully!");
 
             // Insert teacher plan with trial start date
-            const { data: planData, error: planError } = await supabase.from('teacher_plan').insert({
+            const { error: planError } = await supabase.from('teacher_plan').insert({
               id: userData[0].id,
               selected_plan: selectedPlan,
               created_at: new Date()
@@ -114,13 +118,20 @@ export default function RegisterPage() {
             if (planError) {
               console.error("Plan insertion error:", planError);
               setError("Failed to set up your plan. Please contact support.");
+              setLoading(false);
               return;
             }
 
-            console.log("Plan setup successful!");
-          }
+            console.log("Plan setup successful! Redirecting...");
 
-          router.push("/dashboard/teacher");
+            // Use window.location for reliable redirect after auth
+            // router.push sometimes doesn't work right after auth state change
+            window.location.href = "/dashboard/teacher";
+          }
+        } catch (err) {
+          console.error("Setup error:", err);
+          setError("An error occurred during setup. Please try again.");
+          setLoading(false);
         }
       }
     } catch (err) {

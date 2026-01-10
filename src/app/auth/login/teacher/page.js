@@ -29,14 +29,16 @@ export default function LoginPage() {
     setError(null);
     try {
       const { error } = await signIn(email, password);
-      if (error) throw error;
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
 
-      // Redirect to teacher dashboard or main dashboard
-      // Assuming same dashboard for now, or check role
-      router.push("/dashboard/teacher");
+      // Use window.location for reliable redirect after auth
+      window.location.href = "/dashboard/teacher";
     } catch (err) {
       setError(err.message);
-    } finally {
       setLoading(false);
     }
   };

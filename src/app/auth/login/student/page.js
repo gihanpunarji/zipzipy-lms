@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Navbar } from "@/app/components/landing/navbar";
+import { Footer } from "@/app/components/landing/footer";
 
 export default function LoginPage() {
   const { signIn } = useAuth();
@@ -61,6 +62,7 @@ export default function LoginPage() {
         } else {
           setError(signInError.message);
         }
+        setLoading(false);
         return;
       }
 
@@ -76,13 +78,16 @@ export default function LoginPage() {
           console.error("Profile fetch error:", profileError);
           setError("Unable to load user profile. Please contact support.");
           await supabase.auth.signOut();
+          setLoading(false);
           return;
         }
 
-        // Check if user is a student
-        if (userProfile.role !== 'student') {
+        // Check if user is a student (case-insensitive)
+        const userRole = userProfile.role?.toLowerCase();
+        if (userRole !== 'student') {
           setError("This login is for students only. Please use the teacher login.");
           await supabase.auth.signOut();
+          setLoading(false);
           return;
         }
 
@@ -90,17 +95,17 @@ export default function LoginPage() {
         if (userProfile.status !== 'active') {
           setError("Your account is inactive. Please contact support.");
           await supabase.auth.signOut();
+          setLoading(false);
           return;
         }
 
-        // Success! Redirect to dashboard
-        router.push("/dashboard");
+        // Use window.location for reliable redirect after auth
+        window.location.href = "/dashboard";
       }
 
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message || "An unexpected error occurred. Please try again.");
-    } finally {
       setLoading(false);
     }
   };

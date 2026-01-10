@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  /* Color System - Beautiful LMS Colors */
-  --color-primary: #8b5cf6;
+  /* Color System - Light & Bright LMS Colors */
+  --color-primary: #a78bfa;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #06b6d4;
+  --color-secondary: #60d5f2;
   --color-secondary-foreground: #ffffff;
-  --color-accent: #ec4899;
+  --color-accent: #fda4c4;
   --color-accent-foreground: #ffffff;
-  --color-success: #10b981;
+  --color-success: #6ee7b7;
   --color-success-foreground: #ffffff;
-  --color-warning: #f59e0b;
+  --color-warning: #fcd34d;
   --color-warning-foreground: #ffffff;
-  --color-destructive: #ef4444;
+  --color-destructive: #fca5a5;
   --color-destructive-foreground: #ffffff;
 
-  --color-background: #fafafa;
-  --color-foreground: #0a0a0a;
+  --color-background: #ffffff;
+  --color-foreground: #1f2937;
   --color-card: #ffffff;
-  --color-card-foreground: #0a0a0a;
-  --color-muted: #f5f5f5;
-  --color-muted-foreground: #737373;
-  --color-border: #e5e5e5;
-  --color-input: #e5e5e5;
-  --color-ring: #8b5cf6;
+  --color-card-foreground: #1f2937;
+  --color-muted: #f9fafb;
+  --color-muted-foreground: #9ca3af;
+  --color-border: #e5e7eb;
+  --color-input: #f3f4f6;
+  --color-ring: #c4b5fd;
 
   /* Radius */
   --radius: 0.75rem;
@@ -33,18 +33,18 @@
 }
 
 .dark {
-  --color-background: #0c0a1d;
-  --color-foreground: #f5f5f5;
-  --color-card: #151228;
-  --color-card-foreground: #f5f5f5;
-  --color-muted: #1e1b33;
-  --color-muted-foreground: #a3a3a3;
-  --color-border: #2d2847;
-  --color-input: #2d2847;
-  --color-ring: #a78bfa;
+  --color-background: #ffffff;
+  --color-foreground: #1f2937;
+  --color-card: #fefefe;
+  --color-card-foreground: #1f2937;
+  --color-muted: #f9fafb;
+  --color-muted-foreground: #9ca3af;
+  --color-border: #e5e7eb;
+  --color-input: #f3f4f6;
+  --color-ring: #c4b5fd;
   --color-primary: #a78bfa;
-  --color-secondary: #22d3ee;
-  --color-accent: #f472b6;
+  --color-secondary: #60d5f2;
+  --color-accent: #fda4c4;
 }
 
 /* Custom Animations */
