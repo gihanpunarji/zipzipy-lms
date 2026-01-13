@@ -5,6 +5,7 @@ import { Card } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { GraduationCap, BookOpen, Users } from "lucide-react";
 import { Navbar } from "@/app/components/landing/navbar";
+import { Footer } from "@/app/components/landing/footer";
 
 export default function LoginRoleSelection() {
   return (
@@ -90,6 +91,7 @@ export default function LoginRoleSelection() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
 
   );

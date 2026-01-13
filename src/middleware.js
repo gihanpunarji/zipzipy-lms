@@ -76,10 +76,6 @@ export async function middleware(req) {
     '/courses',
   ];
 
-  // Check if current path is public
-  const isPublicRoute = publicRoutes.some(route =>
-    pathname === route || pathname.startsWith('/courses/')
-  );
 
   // Protected routes that require authentication
   const isDashboardRoute = pathname.startsWith('/dashboard');
@@ -105,11 +101,11 @@ export async function middleware(req) {
       if (userData.role === 'Teacher' || userData.role === 'teacher') {
         return NextResponse.redirect(new URL('/dashboard/teacher', req.url));
       } else if (userData.role === 'Student' || userData.role === 'student') {
-        return NextResponse.redirect(new URL('/dashboard', req.url));
+        return NextResponse.redirect(new URL('/dashboard/student', req.url));
       }
     }
 
-    return NextResponse.redirect(new URL('/dashboard', req.url));
+    return NextResponse.redirect(new URL('/dashboard/student', req.url));
   }
 
   // Role-based route protection
@@ -126,12 +122,12 @@ export async function middleware(req) {
 
       // Protect teacher routes
       if (pathname.startsWith('/dashboard/teacher') && userRole !== 'teacher') {
-        return NextResponse.redirect(new URL('/dashboard', req.url));
+        return NextResponse.redirect(new URL('/dashboard/teacher', req.url));
       }
 
       // Protect admin routes
       if (isAdminRoute && userRole !== 'admin') {
-        return NextResponse.redirect(new URL('/dashboard', req.url));
+        return NextResponse.redirect(new URL('/dashboard/admin', req.url));
       }
     }
   }
@@ -139,16 +135,8 @@ export async function middleware(req) {
   return res;
 }
 
-// Configure which routes use this middleware
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public files (public folder)
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

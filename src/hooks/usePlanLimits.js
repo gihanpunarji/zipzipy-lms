@@ -5,10 +5,7 @@ import { useAuth } from '@/app/components/auth-provider';
 import { supabase } from '@/lib/supabase';
 import { PLAN_LIMITS, getRemainingLimit, isLimitReached, getUsagePercentage, hasFeature } from '@/lib/plan-config';
 
-/**
- * Custom hook to manage and check plan limits
- * @returns {Object} Plan information, usage data, and helper functions
- */
+
 export function usePlanLimits() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);

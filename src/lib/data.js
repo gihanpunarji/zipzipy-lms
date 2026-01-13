@@ -1,49 +1,50 @@
 import {
-  LayoutDashboard,
-  BookOpen,
-  FileText,
-  Award,
-  CreditCard,
-  Settings,
-  LifeBuoy,
+    LayoutDashboard,
+    BookOpen,
+    FileText,
+    Award,
+    CreditCard,
+    Settings,
+    LifeBuoy,
+    User,
 } from "lucide-react";
 
 export const sidebarLinks = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    label: "My Courses",
-    href: "/dashboard/my-courses",
-    icon: BookOpen,
-  },
-  {
-    label: "Assignments",
-    href: "/dashboard/assignments",
-    icon: FileText,
-  },
-  {
-    label: "Certificates",
-    href: "/dashboard/certificates",
-    icon: Award,
-  },
-  {
-    label: "Payments",
-    href: "/dashboard/payments",
-    icon: CreditCard,
-  },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-  {
-    label: "Support",
-    href: "/dashboard/support",
-    icon: LifeBuoy,
-  },
+    {
+        label: "Dashboard",
+        href: "/dashboard/teacher",
+        icon: LayoutDashboard,
+    },
+    {
+        label: "Contents",
+        href: "/dashboard/teacher/contents",
+        icon: BookOpen,
+    },
+    {
+        label: "Assignments",
+        href: "/dashboard/teacher/assignments",
+        icon: FileText,
+    },
+    {
+        label: "Payments",
+        href: "/dashboard/teacher/payments",
+        icon: CreditCard,
+    },
+    {
+        label: "Students",
+        href: "/dashboard/teacher/students",
+        icon: User,
+    },
+    {
+        label: "Settings",
+        href: "/dashboard/teacher/settings",
+        icon: Settings,
+    },
+    {
+        label: "Support",
+        href: "/dashboard/teacher/support",
+        icon: LifeBuoy,
+    },
 ];
 
 export const courseCategories = [

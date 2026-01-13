@@ -17,7 +17,6 @@ export default function AuthProvider({ children }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Fetch user profile and role from database
   const fetchUserProfile = async (userId) => {
     try {
       const { data, error } = await supabase
@@ -41,7 +40,6 @@ export default function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    // Get initial session
     const initializeAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -60,7 +58,6 @@ export default function AuthProvider({ children }) {
 
     initializeAuth();
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.email);
@@ -68,37 +65,24 @@ export default function AuthProvider({ children }) {
         setSession(session);
         setUser(session?.user ?? null);
 
-        if (session?.user) {
+        if (event === 'SIGNED_IN' && session?.user) {
           await fetchUserProfile(session.user.id);
-        } else {
+        } else if (event === 'SIGNED_OUT') {
           setUserProfile(null);
           setUserRole(null);
-        }
-
-        setLoading(false);
-
-        // Handle different auth events
-        if (event === 'SIGNED_OUT') {
-          setUserProfile(null);
-          setUserRole(null);
-          // Only redirect if not already on auth/public page
           if (!pathname.startsWith('/auth') && pathname !== '/') {
             router.push('/auth/login');
           }
         }
 
-        if (event === 'SIGNED_IN') {
-          // Don't auto-redirect on sign in - let the login/register page handle it
-          // This prevents conflicts with manual navigation
-          console.log('User signed in, profile will be fetched on next render');
-        }
+        setLoading(false);
       }
     );
 
     return () => {
       subscription?.unsubscribe();
     };
-  }, [router, pathname]);
+  }, []); 
 
   const signIn = async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({

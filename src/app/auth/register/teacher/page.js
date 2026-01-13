@@ -15,8 +15,7 @@ import { useAuth } from "@/app/components/auth-provider";
 import { useId, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { Check } from "lucide-react";
-import { Header } from "@/app/components/header";
+import { Check, Eye, EyeOff } from "lucide-react";
 import { Navbar } from "@/app/components/landing/navbar";
 import { Footer } from "@/app/components/landing/footer";
 
@@ -32,6 +31,16 @@ export default function RegisterPage() {
   const [lastName, setLastName] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("Pro");
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const pricingPlans = [
     {
@@ -62,6 +71,7 @@ export default function RegisterPage() {
     setError(null);
     try {
       const { data, error } = await signUp(email, password, { firstName, lastName, role: 'teacher' });
+      console.log("Registration response:", data, error);
       if (error) {
         // Handle specific Supabase auth errors
         if (error.message.includes('already registered')) {
@@ -69,7 +79,7 @@ export default function RegisterPage() {
         } else if (error.message.includes('invalid email')) {
           setError("Please enter a valid email address.");
         } else if (error.message.includes('Password')) {
-          setError("Password must be at least 6 characters long.");
+          setError("Password is not strong enough.");
         } else {
           setError(error.message);
         }
@@ -123,10 +133,7 @@ export default function RegisterPage() {
             }
 
             console.log("Plan setup successful! Redirecting...");
-
-            // Use window.location for reliable redirect after auth
-            // router.push sometimes doesn't work right after auth state change
-            window.location.href = "/dashboard/teacher";
+            window.location.href = "/auth/login/teacher";
           }
         } catch (err) {
           console.error("Setup error:", err);
@@ -155,7 +162,7 @@ export default function RegisterPage() {
         <div className="absolute inset-0 bg-black/50" />
 
         {/* Content */}
-        <Card className="w-full max-w-2xl relative z-10 shadow-2xl mx-4">
+        <Card className="w-full mt-10 md:mt-0 max-w-2xl relative z-10 shadow-2xl mx-4">
           <CardHeader>
             <CardTitle className="text-2xl">Teacher Sign Up</CardTitle>
             <CardDescription>
@@ -200,25 +207,32 @@ export default function RegisterPage() {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                <div className="grid gap-2">
+                <div className="grid gap-2 relative">
                   <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  <div className="absolute right-2 top-1/2 transform opacity-50 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                    {showPassword ? <EyeOff className="h-4 w-4" onClick={togglePasswordVisibility} /> : <Eye className="h-4 w-4" onClick={togglePasswordVisibility} />}
+                  </div>
                 </div>
-                <div className="grid gap-2">
+
+                <div className="grid gap-2 relative">
                   <Label htmlFor="confirm-password">Confirm password</Label>
                   <Input
                     id="confirm-password"
-                    type="password"
+                    type={showConfirmPassword ? 'text' : 'password'}
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
+                  <div className="absolute right-2 top-1/2 transform opacity-50 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" onClick={toggleConfirmPasswordVisibility} /> : <Eye className="h-4 w-4" onClick={toggleConfirmPasswordVisibility} />}
+                  </div>
                 </div>
               </div>
 
@@ -278,7 +292,7 @@ export default function RegisterPage() {
             </form>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
-              <Link href="/auth/login" className="underline">
+              <Link href="/auth/login/teacher" className="underline">
                 Login
               </Link>
             </div>
