@@ -23,11 +23,6 @@ const teacherLinks = [
     icon: LayoutDashboard,
   },
   {
-    href: "/dashboard/teacher/courses",
-    label: "My Courses",
-    icon: BookOpen,
-  },
-  {
     href: "/dashboard/teacher/students",
     label: "Students",
     icon: Users,
@@ -118,11 +113,11 @@ export default function TeacherSidebar() {
           <div className="rounded-xl bg-gradient-to-br from-primary/10 to-purple-600/10 p-4 border border-primary/20">
             <h4 className="text-sm font-semibold mb-1">Need Help?</h4>
             <p className="text-xs text-muted-foreground mb-3">
-              Check our documentation or contact support
+              Contact our developer team if you have any questions
             </p>
             <Link href="/dashboard/teacher/help">
               <button className="w-full text-xs bg-primary text-white rounded-lg py-2 hover:bg-primary/90 transition-colors">
-                Get Support
+                Contact Developer
               </button>
             </Link>
           </div>

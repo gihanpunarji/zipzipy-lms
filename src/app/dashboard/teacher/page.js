@@ -8,13 +8,13 @@ import {
     CardTitle,
 } from "@/app/components/ui/card";
 import {
-  Users,
-  BookOpen,
-  FileText,
-  TrendingUp,
-  Clock,
-  CheckCircle,
-  AlertCircle,
+    Users,
+    BookOpen,
+    FileText,
+    TrendingUp,
+    Clock,
+    CheckCircle,
+    AlertCircle,
 } from "lucide-react";
 
 export default function TeacherDashboardPage() {
@@ -23,48 +23,53 @@ export default function TeacherDashboardPage() {
     const firstName = userProfile?.firstName || user?.user_metadata?.firstName || "Teacher";
     const lastName = userProfile?.lastName || user?.user_metadata?.lastName || "";
 
+    console.log("teacher Dashboard")
+
+    console.log(firstName + " " + lastName);
+
+
     const stats = [
-      {
-        title: "Total Students",
-        value: "0",
-        description: "Enrolled across all courses",
-        icon: Users,
-        color: "text-blue-600",
-        bgColor: "bg-blue-100",
-      },
-      {
-        title: "Active Courses",
-        value: "0",
-        description: "Currently published",
-        icon: BookOpen,
-        color: "text-green-600",
-        bgColor: "bg-green-100",
-      },
-      {
-        title: "Pending Assignments",
-        value: "0",
-        description: "Awaiting review",
-        icon: FileText,
-        color: "text-orange-600",
-        bgColor: "bg-orange-100",
-      },
-      {
-        title: "Completion Rate",
-        value: "0%",
-        description: "Average across courses",
-        icon: TrendingUp,
-        color: "text-purple-600",
-        bgColor: "bg-purple-100",
-      },
+        {
+            title: "Total Students",
+            value: "0",
+            description: "Enrolled across all courses",
+            icon: Users,
+            color: "text-blue-600",
+            bgColor: "bg-blue-100",
+        },
+        {
+            title: "Active Courses",
+            value: "0",
+            description: "Currently published",
+            icon: BookOpen,
+            color: "text-green-600",
+            bgColor: "bg-green-100",
+        },
+        {
+            title: "Pending Assignments",
+            value: "0",
+            description: "Awaiting review",
+            icon: FileText,
+            color: "text-orange-600",
+            bgColor: "bg-orange-100",
+        },
+        {
+            title: "Completion Rate",
+            value: "0%",
+            description: "Average across courses",
+            icon: TrendingUp,
+            color: "text-purple-600",
+            bgColor: "bg-purple-100",
+        },
     ];
 
     const recentActivity = [
-      {
-        title: "No recent activity",
-        description: "Start creating courses to see activity here",
-        icon: Clock,
-        time: "Just now",
-      },
+        {
+            title: "No recent activity",
+            description: "Start creating courses to see activity here",
+            icon: Clock,
+            time: "Just now",
+        },
     ];
 
     return (

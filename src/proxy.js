@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
-export async function middleware(req) {
+export async function proxy(req) {
   let res = NextResponse.next({
     request: {
       headers: req.headers,
@@ -55,9 +55,16 @@ export async function middleware(req) {
   );
 
   // Refresh session if expired
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  let session = null;
+  try {
+    const {
+      data: { session: sessionData },
+    } = await supabase.auth.getSession();
+    session = sessionData;
+  } catch (error) {
+    console.error('Failed to get session (Supabase may be paused):', error.message);
+    // Continue without session - user will be treated as not logged in
+  }
 
   const { pathname } = req.nextUrl;
 
@@ -90,19 +97,23 @@ export async function middleware(req) {
 
   // If user is logged in and trying to access auth pages, redirect to dashboard
   if (session && pathname.startsWith('/auth/')) {
-    // Fetch user role from database
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('uid', session.user.id)
-      .single();
+    try {
+      // Fetch user role from database
+      const { data: userData } = await supabase
+        .from('users')
+        .select('role')
+        .eq('uid', session.user.id)
+        .single();
 
-    if (userData) {
-      if (userData.role === 'Teacher' || userData.role === 'teacher') {
-        return NextResponse.redirect(new URL('/dashboard/teacher', req.url));
-      } else if (userData.role === 'Student' || userData.role === 'student') {
-        return NextResponse.redirect(new URL('/dashboard/student', req.url));
+      if (userData) {
+        if (userData.role === 'Teacher' || userData.role === 'teacher') {
+          return NextResponse.redirect(new URL('/dashboard/teacher', req.url));
+        } else if (userData.role === 'Student' || userData.role === 'student') {
+          return NextResponse.redirect(new URL('/dashboard/student', req.url));
+        }
       }
+    } catch (error) {
+      console.error('Failed to fetch user role:', error.message);
     }
 
     return NextResponse.redirect(new URL('/dashboard/student', req.url));
@@ -110,25 +121,29 @@ export async function middleware(req) {
 
   // Role-based route protection
   if (session && isDashboardRoute) {
-    // Fetch user role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('uid', session.user.id)
-      .single();
+    try {
+      // Fetch user role
+      const { data: userData } = await supabase
+        .from('users')
+        .select('role')
+        .eq('uid', session.user.id)
+        .single();
 
-    if (userData) {
-      const userRole = userData.role.toLowerCase();
+      if (userData) {
+        const userRole = userData.role.toLowerCase();
 
-      // Protect teacher routes
-      if (pathname.startsWith('/dashboard/teacher') && userRole !== 'teacher') {
-        return NextResponse.redirect(new URL('/dashboard/teacher', req.url));
+        // Protect teacher routes
+        if (pathname.startsWith('/dashboard/teacher') && userRole !== 'teacher') {
+          return NextResponse.redirect(new URL('/dashboard/teacher', req.url));
+        }
+
+        // Protect admin routes
+        if (isAdminRoute && userRole !== 'admin') {
+          return NextResponse.redirect(new URL('/dashboard/admin', req.url));
+        }
       }
-
-      // Protect admin routes
-      if (isAdminRoute && userRole !== 'admin') {
-        return NextResponse.redirect(new URL('/dashboard/admin', req.url));
-      }
+    } catch (error) {
+      console.error('Failed to fetch user role for route protection:', error.message);
     }
   }
 

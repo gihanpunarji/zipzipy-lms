@@ -1,25 +1,34 @@
 "use client";
 
-import Sidebar from "../components/sidebar";
-import { Header } from "../components/header";
 import { useAuth } from "@/app/components/auth-provider";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 export default function DashboardLayout({ children }) {
-  const { user, loading } = useAuth();
+  const { user, userRole, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!loading && !user) {
+      // Not logged in - redirect to login
       router.push("/auth/login");
+    } else if (!loading && user && userRole) {
+      // Logged in - check if they're in the right dashboard
+      if (pathname.startsWith('/dashboard/teacher') && userRole !== 'teacher') {
+        // Non-teacher trying to access teacher dashboard
+        router.push('/dashboard');
+      } else if (pathname === '/dashboard' && userRole === 'teacher') {
+        // Teacher at generic dashboard - redirect to teacher dashboard
+        router.push('/dashboard/teacher');
+      }
     }
-  }, [user, loading, router]);
+  }, [user, userRole, loading, router, pathname]);
 
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
-        {/* <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /> */}
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -29,11 +38,9 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <Sidebar />
+    <div className="min-h-screen w-full">
       <div className="flex flex-col">
-        <Header />
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex flex-1 flex-col">
           {children}
         </main>
       </div>

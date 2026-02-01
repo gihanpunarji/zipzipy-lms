@@ -49,9 +49,8 @@ export default function AuthProvider({ children }) {
         if (session?.user) {
           await fetchUserProfile(session.user.id);
         }
-      } catch (error) {
-        console.error('Error initializing auth:', error);
       } finally {
+        console.log('Auth initialization complete');
         setLoading(false);
       }
     };
